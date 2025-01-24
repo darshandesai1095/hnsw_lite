@@ -65,11 +65,13 @@ export const calculateCustomMetric = (v1: number[], v2: number[]): number => {
 #### 4. Serialize and Deserialize the Graph
 The project includes default implementations for Euclidean distance and Cosine similarity. You can create your own metric function and integrate it as needed:
 
+- Save to JSON:
 ```typescript
 const graphJSON = hnsw.toJSON(); // Convert the graph to JSON
 fs.writeFileSync('hnsw_graph.json', JSON.stringify(graphJSON));
 ```
 
+- Load from JSON:
 ```typescript
 const graphData = JSON.parse(fs.readFileSync('hnsw_graph.json', 'utf8'));
 const restoredHnsw = HNSW.fromJSON(graphData); // Rebuild the graph from JSON
