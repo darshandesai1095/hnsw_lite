@@ -1,13 +1,41 @@
 import { Layer } from './layer';
+import { Node } from './node';
+import { calculateEuclideanDistance } from './utils/calculateEuclideanDistance';
+import { calculateCosineSimilarity } from './utils/calculateCosineSimilarity';
+
 
 export class HNSW {
   layers: Layer[] = [];
   maxLayers: number;
   maxEdges: number;
+  distanceFunction: Function;
 
-  constructor(maxLayers: number, maxEdges: number) {
+  constructor(
+    maxLayers: number,
+    maxEdges: number,
+    distanceFunction: string | Function = 'euclideanDistance'
+  ) {
     this.maxLayers = maxLayers;
     this.maxEdges = maxEdges;
+
+    // Determine the distance function to use
+    if (typeof distanceFunction === 'string') {
+      if (distanceFunction === 'euclideanDistance') {
+        this.distanceFunction = calculateEuclideanDistance;
+      } else if (distanceFunction === 'cosineSimilarity') {
+        this.distanceFunction = calculateCosineSimilarity;
+      } else {
+        throw new Error(
+          `Invalid distance function name: ${distanceFunction}. Valid options are 'euclideanDistance' or 'cosineSimilarity'.`
+        );
+      }
+    } else if (typeof distanceFunction === 'function') {
+      this.distanceFunction = distanceFunction;
+    } else {
+      throw new Error(
+        `Invalid distanceFunction type: expected a string or function, but received ${typeof distanceFunction}.`
+      );
+    }
 
     // Initialize layers with nodes that decrease as the layers increase
     let nodesInLayer = Math.pow(2, maxLayers - 1); // Start with a larger number of nodes for the bottom layer
@@ -16,6 +44,7 @@ export class HNSW {
       nodesInLayer = Math.max(1, Math.floor(nodesInLayer / 2)); // Halve nodes in each layer
     }
   }
+
 
   // Add a node to the HNSW, starting from the top layer
   add(id: string, vector: number[]): void {
@@ -79,5 +108,55 @@ export class HNSW {
     return closestNodeIds;
   }
   
+  toJSON(): object {
+    // Convert your internal layers and nodes to a plain object or JSON-friendly format
+    return {
+      layers: this.layers.map(layer => layer.toJSON()),  // Assuming Layer also has a toJSON method
+      maxLayers: this.maxLayers,
+      maxEdges: this.maxEdges,
+      distanceFunction: this.distanceFunction.name
+    };
+  }
+
+  // Rebuild the HNSW model from a JSON object
+  static rebuildFromJSON(json: object): HNSW {
+    const { maxLayers, maxEdges, layers, distanceFunction } = json as { maxLayers: number; maxEdges: number; layers: any[], distanceFunction: Function };
+
+    // Use the default distance function (euclideanDistance) during reconstruction.
+    const hnsw = new HNSW(maxLayers, maxEdges, distanceFunction); 
+
+    // Rebuild each layer and its nodes
+    layers.forEach((layerData, layerIndex) => {
+      const layer = hnsw.layers[layerIndex];
+      layerData.nodes.forEach((nodeData: any) => {
+        const node = new Node(nodeData.id, nodeData.vector, maxEdges, layerIndex);
+        layer.nodes.push(node); // Add the node to the layer
+        layer.nodeMap.set(node.id, node); // Add the node to the map
+
+        // Rebuild neighbors (not directly set by toJSON)
+        nodeData.neighbors.forEach((neighborId: string) => {
+          const neighborNode = hnsw.getNodeById(neighborId);
+          if (neighborNode) {
+            // Recalculate the distance here since we're using node ids
+            const distance = hnsw.distanceFunction(node.vector, neighborNode.vector);
+            node.addNeighbor(neighborNode, distance); // Add the neighbor with the calculated distance
+          }
+        });
+      });
+    });
+
+    return hnsw;
+  }
+
+
+  // Helper function to get a node by its ID
+  private getNodeById(id: string): Node | undefined {
+    for (let layer of this.layers) {
+      const node = layer.nodeMap.get(id);
+      if (node) return node;
+    }
+    return undefined;
+  }
+
 
 }
