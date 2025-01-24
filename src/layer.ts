@@ -126,4 +126,16 @@ export class Layer {
     return [currentNode.id]; // Return the ID of the closest node
   }
 
+  toJSON(): object {
+    return {
+      layerIndex: this.layer,
+      nodes: this.nodes.map(node => ({
+        id: node.id,
+        vector: node.vector,
+        neighbors: node.neighbors.map(neighbor => neighbor[0].id),  // Access the Node from the tuple
+      })),
+    }
+  }
+
+
 }
