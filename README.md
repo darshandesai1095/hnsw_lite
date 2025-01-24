@@ -53,7 +53,7 @@ hnsw.add('node-2', [0.5, 0.6, 0.7, 0.8]);
 hnsw.add('node-3', [0.2, 0.3, 0.4, 0.5]);
 ```
 
-#### 2. Add Vectors in Bulk
+#### 3. Add Vectors in Bulk
 To add vectors to the HNSW graph in bulk, call the `addBulk` method:
 
 ```typescript
@@ -65,14 +65,14 @@ hnsw.addBulk([
 ]);
 ```
 
-#### 3. Remove Vectors
+#### 4. Remove Vectors
 To remove vectors from the HNSW graph, call the remove method with the unique ID of the vector you want to remove. When a node is removed, the graph will attempt to maintain the maxEdges per node value specified during initialization. However, if there are not enough nodes in a given layer, the number of edges for some nodes may fall below the maxEdges constraint.
 
 ```typescript
 hnsw.remove('node-1')
 ```
 
-#### 4. Query Vectors
+#### 5. Query Vectors
 To find the nearest neighbor(s) for a given query vector, use the `query` method. By default, the search will return one result. However, you can optionally specify a value between 1 and maxEdges (inclusive) to retrieve more neighbors.
 
 As this is a lightweight implementation, the search will attempt to find the nearest node to the query vector on the final layer of the graph. It will then return the nearest neighbors to that specific node, not directly to the query vector itself:
@@ -82,7 +82,7 @@ console.log('Nearest neighbors:', result);
 ```
 
 
-#### 5. Serialize and Deserialize the Graph
+#### 6. Serialize and Deserialize the Graph
 To save the HNSW graph to a JSON format and rebuild it later, use the toJSON and fromJSON methods:
 
 ##### Save to JSON
