@@ -57,13 +57,13 @@ The project includes default implementations for Euclidean distance and Cosine s
 
 ```typescript
 export const calculateCustomMetric = (v1: number[], v2: number[]): number => {
-    // Define your custom metric logic here
-    return 0;
+    // Define your custom distance metric logic here
+    return distance;
 };
 ```
 
 #### 4. Serialize and Deserialize the Graph
-The project includes default implementations for Euclidean distance and Cosine similarity. You can create your own metric function and integrate it as needed:
+To save the HNSW graph to a JSON format and rebuild it later, use the toJSON and fromJSON methods:
 
 - Save to JSON:
 ```typescript
