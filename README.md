@@ -37,8 +37,11 @@ The project includes implementations for Euclidean distance and Cosine similarit
 ```typescript
    import { HNSW } from './hnsw';
 
-   const euclidean_hnsw = new HNSW(3, 5, 'euclideanDistance'); // Create an HNSW graph with 3 layers and max 10 edges per node
-   const cosine_hnsw = new HNSW(3,5, 'cosineSimilarity')
+   // Create an HNSW graph with 3 layers and max 8 edges per node
+   const euclidean_hnsw = new HNSW(3, 8, 'euclideanDistance'); 
+
+   // Create an HNSW graph with 4 layers and max 5 edges per node
+   const cosine_hnsw = new HNSW(4,5, 'cosineSimilarity')
 ```
 
 #### 2. Add Vectors
