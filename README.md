@@ -78,7 +78,7 @@ To find the nearest neighbor(s) for a given query vector, use the `query` method
 As this is a lightweight implementation, the search will attempt to find the nearest node to the query vector on the final layer of the graph. It will then return the nearest neighbors to that specific node, not directly to the query vector itself:
 ```typescript
 const result = hnsw.query([0.15, 0.25, 0.35, 0.45], 2); // Find 2 nearest neighbors
-console.log('Nearest neighbors:', result);
+console.log('Nearest neighbors:', result); // output (string[]): ['node-1', 'node-3']
 ```
 
 
