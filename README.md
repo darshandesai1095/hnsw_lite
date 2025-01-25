@@ -27,7 +27,7 @@ Make sure you have Node.js and npm installed on your system.
 
 2. Alternatively, install the beta version directly from npm:
    ```bash
-  npm install hnsw-lite@beta
+   npm install hnsw-lite@beta
    ```
 
 ### Usage
