@@ -8,7 +8,7 @@ This implementation is written in TypeScript and is designed to be simple and cu
 ## Features
 - Support for adding vectors with IDs.
 - Multi-layer graph construction with customizable maximum layers and edges per node.
-- Support for Euclidean distance.
+- Support for Euclidean distance and Cosine similarity.
 - Randomized geometric distribution to assign node layers.
 - Flexible and lightweight codebase.
 
