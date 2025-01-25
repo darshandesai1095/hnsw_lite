@@ -20,13 +20,14 @@ Make sure you have Node.js and npm installed on your system.
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/darshandesai1095/hnsw_lite
    cd hnsw_lite
+   npm install
    ```
 
-2. Install the required dependencies:
+2. Alternatively, install the beta version directly from npm:
    ```bash
-   npm install
+  npm install hnsw-lite@beta
    ```
 
 ### Usage
@@ -35,7 +36,7 @@ Make sure you have Node.js and npm installed on your system.
 The project includes implementations for Euclidean distance and Cosine similarity. If no parameter is specified, Euclidean Distance will be used:
 
 ```typescript
-   import { HNSW } from './hnsw';
+   import { HNSW } from 'hnsw-lite@beta';
 
    // Create an HNSW graph with 3 layers and max 8 edges per node
    const euclidean_hnsw = new HNSW(3, 8, 'euclideanDistance'); 
