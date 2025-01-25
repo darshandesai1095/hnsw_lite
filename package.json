@@ -1,6 +1,6 @@
 {
   "name": "hnsw-lite",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "A lightweight HNSW implementation for nearest neighbor search.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,7 +14,9 @@
     "hnsw",
     "nearest-neighbor",
     "search",
-    "algorithm"
+    "algorithm",
+    "knn",
+    "ann"
   ],
   "author": "",
   "license": "MIT",
