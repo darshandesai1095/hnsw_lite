@@ -46,32 +46,47 @@ export class HNSW {
   }
 
 
-  // Add a node to the HNSW, starting from the top layer
+ // Add a node to the HNSW, starting from the top layer
   add(id: string, vector: number[]): void {
     // Validate that the vector contains only numbers between 0 and 1 inclusive
-    const isValidVector = vector.every((value) => 
-      typeof value === "number" && value >= 0 && value <= 1 && Number.isFinite(value)
+    const isValidVector = vector.every(
+      (value) => typeof value === "number" && value >= 0 && value <= 1 && Number.isFinite(value)
     );
-  
+
     if (!isValidVector) {
       throw new Error(
         `Invalid vector: All values must be floating-point numbers between 0 and 1 inclusive. Received: ${JSON.stringify(vector)}`
       );
     }
-  
+
+    // Check if this is the first vector being added
+    if (this.layers[0].nodes.length === 0) {
+      // Save the vector length to validate future vectors
+      (this as any)._vectorLength = vector.length;
+    } else {
+      // Ensure the vector length matches the previously added vectors
+      const expectedLength = (this as any)._vectorLength;
+      if (vector.length !== expectedLength) {
+        throw new Error(
+          `Vector length mismatch: Expected vectors of length ${expectedLength}, but received a vector of length ${vector.length}.`
+        );
+      }
+    }
+
     let level = 0;
-  
+
     // Randomly assign the level of the new node based on geometric distribution
     while (Math.random() < 0.5 && level < this.maxLayers - 1) {
       level++;
     }
-  
+
     // Add the node to the layers, from level 0 to the calculated level
     for (let currentLayer = 0; currentLayer <= level; currentLayer++) {
       const layer = this.layers[currentLayer];
       layer.addNode(vector, id, currentLayer); // Add node with id to the layer
     }
   }
+
   
   
   // Add multiple nodes in bulk using tuples (vector, id)
