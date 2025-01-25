@@ -1,4 +1,3 @@
-# Ignore node_modules directory
 node_modules/
 
 # Ignore .watchman files
@@ -34,9 +33,13 @@ Thumbs.db
 
 # Compiled files
 dist/
-b
 
+# Tests and config
 tests/
 jest.config.js
-.npmignore
 
+# Source files (excluded from npm)
+src/
+*.ts
+*.map
+.git/
